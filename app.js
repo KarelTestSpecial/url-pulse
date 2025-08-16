@@ -1,6 +1,6 @@
 // app.js
 // ===================================================================================
-// BELANGRIJKE CONFIGURATIE
+// BELANGRIJKE CONFIGURATie
 // Vervang de onderstaande waarden door uw EIGEN Supabase Project URL en Anon Key.
 // U vindt deze in uw Supabase project dashboard onder Settings -> API.
 // ===================================================================================
@@ -11,9 +11,11 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Initialiseer de Supabase client
 // *** AANPASSING HIER ***
-// De 'let supabase;' is verwijderd en de initialisatie gebeurt nu in één constante.
-// De try-catch is ook verwijderd voor duidelijkere foutmeldingen in de console.
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// We halen eerst de createClient functie uit het globale 'supabase' object.
+// Daarna roepen we die functie aan om onze client instance te maken.
+// Dit voorkomt de 'ReferenceError'.
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
 // DOM Elementen
@@ -30,7 +32,7 @@ const newUrlInput = document.getElementById('new-url');
 const handleSignUp = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabaseClient.auth.signUp({ email, password });
     if (error) {
         alert(`Registratie mislukt: ${error.message}`);
     } else {
@@ -41,7 +43,7 @@ const handleSignUp = async () => {
 const handleLogIn = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) {
         alert(`Inloggen mislukt: ${error.message}`);
     } else {
@@ -51,7 +53,7 @@ const handleLogIn = async () => {
 };
 
 const handleLogOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut();
     if (error) {
         alert(`Uitloggen mislukt: ${error.message}`);
     } else {
@@ -64,14 +66,14 @@ const handleLogOut = async () => {
 
 const fetchUrls = async () => {
     urlList.innerHTML = '<li>Laden...</li>';
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
     if (!user) {
         urlList.innerHTML = '<li>Log in om uw URLs te zien.</li>';
         return;
     }
 
-    const { data: urls, error } = await supabase
+    const { data: urls, error } = await supabaseClient
         .from('monitored_urls')
         .select('*')
         .eq('user_id', user.id)
@@ -93,13 +95,13 @@ const handleAddUrl = async () => {
         return;
     }
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) {
         alert('U moet ingelogd zijn om een URL toe te voegen.');
         return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('monitored_urls')
         .insert({ url: url, user_id: user.id, status: 'UNKNOWN' })
         .select();
@@ -117,7 +119,7 @@ const handleDeleteUrl = async (urlId) => {
         return;
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('monitored_urls')
         .delete()
         .eq('id', urlId);
@@ -152,7 +154,7 @@ const renderUrls = (urls) => {
 };
 
 const updateUI = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
     if (user) {
         // Ingelogde staat
@@ -170,15 +172,14 @@ const updateUI = async () => {
 };
 
 // Luister naar authenticatie-events (bv. na een redirect van de bevestigingsmail)
-supabase.auth.onAuthStateChange((_event, session) => {
+supabaseClient.auth.onAuthStateChange((_event, session) => {
     updateUI();
 });
 
 
 // Initialiseer de UI bij het laden van de pagina
 document.addEventListener('DOMContentLoaded', () => {
-    // We controleren nu of de supabase client succesvol is aangemaakt.
-    if (typeof supabase !== 'undefined') {
+    if (typeof supabaseClient !== 'undefined') {
         updateUI();
     } else {
         alert("Supabase client kon niet worden geïnitialiseerd. Controleer de URL en Key in app.js.");
