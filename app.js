@@ -3,8 +3,8 @@
 // Vervang de onderstaande waarden door uw EIGEN Supabase Project URL en Anon Key.
 // U vindt deze in uw Supabase project dashboard onder Settings -> API.
 // ===================================================================================
-const SUPABASE_URL = 'VUL_HIER_UW_SUPABASE_URL_IN';
-const SUPABASE_ANON_KEY = 'VUL_HIER_UW_SUPABASE_ANON_KEY_IN';
+const SUPABASE_URL = 'https://uxezxtvmtvsdvzhsnrgq.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4ZXp4dHZtdHZzZHZ6aHNucmdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzNzIxMTEsImV4cCI6MjA3MDk0ODExMX0.ehbCSQn6dNa_JlZIAK5pl68hJ18M0K1OziJcXy0I8iw';
 
 // --- Vanaf hier hoeft u niets te wijzigen ---
 
