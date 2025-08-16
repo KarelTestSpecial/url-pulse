@@ -1,3 +1,4 @@
+// app.js
 // ===================================================================================
 // BELANGRIJKE CONFIGURATIE
 // Vervang de onderstaande waarden door uw EIGEN Supabase Project URL en Anon Key.
@@ -9,13 +10,10 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // --- Vanaf hier hoeft u niets te wijzigen ---
 
 // Initialiseer de Supabase client
-let supabase;
-try {
-    supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} catch (error) {
-    console.error("Supabase initialisatie fout. Heeft u de URL en Key correct ingevuld?", error);
-    alert("Supabase is niet correct geconfigureerd. Controleer de variabelen in app.js.");
-}
+// *** AANPASSING HIER ***
+// De 'let supabase;' is verwijderd en de initialisatie gebeurt nu in één constante.
+// De try-catch is ook verwijderd voor duidelijkere foutmeldingen in de console.
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
 // DOM Elementen
@@ -142,7 +140,7 @@ const renderUrls = (urls) => {
             li.innerHTML = `
                 <span>${item.url}</span>
                 <div>
-                    <span class="status status-${item.status || 'UNKNOWN'}">${item.status || 'UNKNOWN'}</span>
+                    <span class="status status-${(item.status || 'UNKNOWN').toLowerCase()}">${item.status || 'UNKNOWN'}</span>
                     <button class="delete-btn" onclick="handleDeleteUrl(${item.id})">Verwijder</button>
                 </div>
             `;
@@ -179,7 +177,11 @@ supabase.auth.onAuthStateChange((_event, session) => {
 
 // Initialiseer de UI bij het laden van de pagina
 document.addEventListener('DOMContentLoaded', () => {
-    if (supabase) {
+    // We controleren nu of de supabase client succesvol is aangemaakt.
+    if (typeof supabase !== 'undefined') {
         updateUI();
+    } else {
+        alert("Supabase client kon niet worden geïnitialiseerd. Controleer de URL en Key in app.js.");
+        console.error("Supabase is undefined. Controleer de variabelen en de script-tag in je HTML.");
     }
 });
