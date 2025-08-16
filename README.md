@@ -47,7 +47,21 @@ Om dit project werkend te krijgen, moet u de volgende stappen eenmalig doorlopen
     ```
     Klik op **"RUN"** om de tabel en de beveiligingsregels aan te maken.
 
-### Stap 2: Vind uw Supabase API Keys
+### Stap 2: Stel de Site URL in (Essentieel voor E-mailverificatie!)
+
+Dit is een cruciale stap om ervoor te zorgen dat gebruikers na het klikken op de verificatielink in hun e-mail naar de juiste website worden teruggestuurd.
+
+1.  Ga naar uw project op [supabase.com](https://supabase.com).
+2.  Navigeer naar **Authentication** (het icoon met de gebruikers).
+3.  Klik in het linkermenu op **URL Configuration**.
+4.  Bij **Site URL**, vervang de standaardwaarde (`http://localhost:3000`) door de volledige, live URL van uw GitHub Pages site.
+    *   **BELANGRIJK:** Omdat dit een *Project Site* is op GitHub Pages, moet de URL de naam van de repository bevatten.
+    *   Het correcte formaat is: `https://<uw-gebruikersnaam>.github.io/<naam-van-deze-repository>/`
+    *   Voorbeeld: `https://kareltestspecial.github.io/url-pulse/`
+5.  Klik op **Save**.
+6.  (Optioneel maar aanbevolen) Scroll naar beneden naar **Additional Redirect URLs** en voeg uw site URL met wildcards toe om eventuele subpagina's correct af te handelen: `https://<uw-gebruikersnaam>.github.io/<naam-van-deze-repository>/**`
+
+### Stap 3: Vind uw Supabase API Keys
 
 1.  Navigeer in uw Supabase-project naar **Settings** (het tandwiel-icoon linksonder).
 2.  Klik op het **API** tabblad.
@@ -56,17 +70,17 @@ Om dit project werkend te krijgen, moet u de volgende stappen eenmalig doorlopen
     *   **Project API Keys -> `anon` `public`**: Dit is de publieke sleutel voor de frontend.
     *   **Project API Keys -> `service_role` `secret`**: Dit is de geheime sleutel voor de backend (de GitHub Action). **DEEL DEZE SLEUTEL NOOIT PUBLIEK!**
 
-### Stap 3: Configureer GitHub Secrets
+### Stap 4: Configureer GitHub Secrets
 
 1.  Ga naar uw GitHub repository en klik op het tabblad **Settings**.
 2.  Navigeer naar **Secrets and variables > Actions** in het linkermenu.
 3.  Klik op de knop **"New repository secret"** en maak de volgende twee secrets aan:
     *   **Naam:** `SUPABASE_URL`
-        *   **Waarde:** Plak hier uw **Project URL** uit Stap 2.
+        *   **Waarde:** Plak hier uw **Project URL** uit Stap 3.
     *   **Naam:** `SUPABASE_SERVICE_KEY`
-        *   **Waarde:** Plak hier uw **`service_role` secret** key uit Stap 2.
+        *   **Waarde:** Plak hier uw **`service_role` secret** key uit Stap 3.
 
-### Stap 4: Configureer de Frontend (`app.js`)
+### Stap 5: Configureer de Frontend (`app.js`)
 
 1.  Open het `app.js` bestand in deze repository.
 2.  Bovenaan het bestand ziet u de volgende regels:
@@ -78,13 +92,13 @@ Om dit project werkend te krijgen, moet u de volgende stappen eenmalig doorlopen
 4.  Vervang `'VUL_HIER_UW_SUPABASE_ANON_KEY_IN'` door uw **`anon` `public`** key.
 5.  Sla het bestand op en commit de wijzigingen naar uw repository.
 
-### Stap 5: Activeer GitHub Pages
+### Stap 6: Activeer GitHub Pages
 
 1.  Ga naar uw GitHub repository en klik op het tabblad **Settings**.
 2.  Navigeer naar **Pages** in het linkermenu.
 3.  Onder **"Build and deployment"**, selecteer `main` (of `master`) als uw branch.
 4.  Laat de map op `/root` staan en klik op **Save**.
-5.  Het kan een paar minuten duren, maar uw URL-Pulse applicatie zal nu live zijn op de getoonde URL (bv. `https://<uw-gebruikersnaam>.github.io/<repository-naam>/`).
+5.  Het kan een paar minuten duren, maar uw URL-Pulse applicatie zal nu live zijn op de getoonde URL. Kopieer deze URL en gebruik deze in Stap 2.
 
 ---
 

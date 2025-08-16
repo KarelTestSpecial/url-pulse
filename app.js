@@ -29,10 +29,21 @@ const newUrlInput = document.getElementById('new-url');
 
 // === AUTHENTICATIE FUNCTIES ===
 
+// app.js - AANPASSING IN handleSignUp
+
 const handleSignUp = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
-    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
+    // Voeg een 'options' object toe om de redirect URL te forceren
+    const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: 'https://kareltestspecial.github.io/url-pulse/'
+        }
+    });
+
     if (error) {
         alert(`Registratie mislukt: ${error.message}`);
     } else {
