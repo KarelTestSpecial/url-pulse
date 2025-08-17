@@ -47,9 +47,11 @@ Om dit project werkend te krijgen, moet u de volgende stappen eenmalig doorlopen
     ```
     Klik op **"RUN"** om de tabel en de beveiligingsregels aan te maken.
 
-### Stap 2: Stel de Site URL in (Essentieel voor E-mailverificatie!)
+### Stap 2: Stel de Site URL in (Belangrijk voor E-mail Templates!)
 
-Dit is een cruciale stap om ervoor te zorgen dat gebruikers na het klikken op de verificatielink in hun e-mail naar de juiste website worden teruggestuurd.
+Het is een goede gewoonte om de standaard URL's van uw site in te stellen. Dit is vooral belangrijk voor e-mails zoals "wachtwoord vergeten", etc.
+
+**Let op:** Voor de **e-mailverificatie na registratie** wordt deze instelling genegeerd. De correcte redirect-URL wordt voor de betrouwbaarheid direct in de code (`app.js`) meegegeven. Voor andere e-mails die Supabase verstuurt, is deze instelling wel van belang.
 
 1.  Ga naar uw project op [supabase.com](https://supabase.com).
 2.  Navigeer naar **Authentication** (het icoon met de gebruikers).
