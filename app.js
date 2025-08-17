@@ -190,7 +190,36 @@ supabaseClient.auth.onAuthStateChange((_event, session) => {
 
 // Initialiseer de UI bij het laden van de pagina
 document.addEventListener('DOMContentLoaded', () => {
+    // Functie om de custom email verificatie-URL af te handelen
+    const handleEmailVerification = async () => {
+        // Controleer of de URL-hash het verificatiepad bevat
+        if (window.location.hash.includes('#/auth/verify?')) {
+            // Extraheer de query parameters uit de hash
+            const queryString = window.location.hash.split('?')[1];
+            const urlParams = new URLSearchParams(queryString);
+            const token_hash = urlParams.get('token_hash');
+            const type = urlParams.get('type');
+
+            if (token_hash && type) {
+                console.log('Verifying email with token:', token_hash);
+                // Verifieer de gebruiker bij Supabase
+                const { error } = await supabaseClient.auth.verifyOtp({ token_hash, type });
+                if (error) {
+                    alert(`Verificatie mislukt: ${error.message}`);
+                } else {
+                    console.log('Verificatie succesvol.');
+                    // De onAuthStateChange listener zal de UI updaten.
+                    // We kunnen hier de URL opschonen.
+                    window.location.hash = '';
+                }
+            }
+        }
+    };
+
     if (typeof supabaseClient !== 'undefined') {
+        // Voer eerst de verificatie-check uit
+        handleEmailVerification();
+        // Update daarna de UI op basis van de huidige auth state
         updateUI();
     } else {
         alert("Supabase client kon niet worden geïnitialiseerd. Controleer de URL en Key in app.js.");
