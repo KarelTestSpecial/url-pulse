@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL-Pulse - Website Uptime Monitoring</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1, h2 { color: #555; }
+        input[type="email"], input[type="password"], input[type="text"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        #auth-section, #dashboard-section { margin-top: 20px; padding: 20px; border: 1px solid #eee; border-radius: 5px;}
+        #url-list { list-style: none; padding: 0; }
+        #url-list li { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        #url-list li:last-child { border-bottom: none; }
+        .status { padding: 5px 10px; border-radius: 15px; color: white; font-weight: bold; }
+        .status-UP { background-color: #28a745; }
+        .status-DOWN { background-color: #dc3545; }
+        .status-UNKNOWN { background-color: #6c757d; }
+        .delete-btn { background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL-Pulse</h1>
+        <p>Monitor de uptime van uw websites, volledig beheerd vanuit GitHub.</p>
+
+        <!-- Authenticatie Sectie -->
+        <div id="auth-section">
+            <h2>Begin hier</h2>
+            <input type="email" id="email" placeholder="E-mailadres" required>
+            <input type="password" id="password" placeholder="Wachtwoord" required>
+            <button onclick="handleSignUp()">Registreer</button>
+            <button onclick="handleLogIn()">Log In</button>
+        </div>
+
+        <!-- Dashboard Sectie (verborgen tot ingelogd) -->
+        <div id="dashboard-section" style="display:none;">
+            <h2>Mijn Dashboard</h2>
+            <p>Welkom, <span id="user-email"></span>!</p>
+
+            <div id="add-url-form">
+                <h3>Voeg een nieuwe URL toe</h3>
+                <input type="text" id="new-url" placeholder="https://voorbeeld.com">
+                <button onclick="handleAddUrl()">Voeg toe</button>
+            </div>
+
+            <h3>Mijn Gemonitorde URL's</h3>
+            <ul id="url-list">
+                <!-- URL's worden hier dynamisch geladen -->
+            </ul>
+            <button onclick="handleLogOut()">Log Uit</button>
+        </div>
+    </div>
+
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Eigen Applicatie Script -->
+    <script src="app.js"></script>
+</body>
+</html>
